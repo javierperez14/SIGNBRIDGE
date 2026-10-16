@@ -1,7 +1,13 @@
 import axios from 'axios';
+import { debeCerrarSesion } from './sessionGuard';
+
+// En Docker el frontend lo sirve Nginx y la API va por el mismo dominio en /api
+// (VITE_API_URL=/api en el build). En desarrollo con `pnpm dev` apunta directo
+// al backend. Ver Frontend-SignBridge/.env.example.
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -14,7 +20,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (r) => r,
   (error) => {
-    if (error.response?.status === 401) {
+    // Antes: CUALQUIER 401 recargaba la página. Con una contraseña equivocada
+    // en el login, el mensaje de error nunca llegaba a verse.
+    if (debeCerrarSesion(error.response?.status, error.config?.url, error.config?.method)) {
       localStorage.clear();
       window.location.href = '/';
     }

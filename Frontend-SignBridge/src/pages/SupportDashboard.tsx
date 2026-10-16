@@ -4,6 +4,8 @@ import type { SupportTicketWithUser, FeedbackItemWithUser, QuickReply } from '..
 import { Card, Spinner, Alert, Badge, StatCard, Btn } from '../components/UI';
 import { useAuth } from '../context/AuthContext';
 
+type TicketStatus = Parameters<typeof supportApi.updateStatus>[1];
+
 type SupportTab = 'tickets' | 'feedback';
 
 const STATUS_META: Record<string, { label: string; color: string; bg: string }> = {
@@ -190,10 +192,10 @@ function TicketsTab() {
     setModalSubmitting(true);
     setModalError('');
     try {
-      await supportApi.updateStatus(id, status as any, solution || undefined);
+      await supportApi.updateStatus(id, status as TicketStatus, solution || undefined);
       setTickets(prev => prev.map(t =>
         (t.id_support ?? t.id_ticket) === id
-          ? { ...t, status: status as any, solution: solution || t.solution }
+          ? { ...t, status: status as TicketStatus, solution: solution || t.solution }
           : t
       ));
       setTicketEnEdicion(null);
@@ -351,7 +353,7 @@ function FeedbackAdminTab() {
     try {
       const { data } = await feedbackApi.setReviewed(id, true, { response, quickReplyKey });
       setItems(prev => prev.map(f => f.id_feedback === id ? { ...f, is_reviewed: true, support_response: data.support_response } : f));
-      setResponseDrafts(prev => { const { [id]: _drop, ...rest } = prev; return rest; });
+      setResponseDrafts(prev => { const rest = { ...prev }; delete rest[id]; return rest; });
     } catch {
       setError('No se pudo marcar la valoración como revisada. Solo Soporte puede hacerlo.');
     } finally {

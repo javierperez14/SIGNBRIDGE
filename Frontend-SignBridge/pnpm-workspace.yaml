@@ -1,0 +1,10 @@
+# Overrides: fuerzan una versión de una dependencia TRANSITIVA (una que no
+# instalamos directamente, sino que trae otra librería). Se usan solo para
+# corregir vulnerabilidades que reporta `pnpm audit` cuando la librería
+# padre todavía no se actualizó. Revisar en cada auditoría si ya sobran.
+overrides:
+  # eslint > minimatch > brace-expansion (GHSA ReDoS)
+  brace-expansion@>=5 <5.0.7: 5.0.12
+  # eslint-plugin-react-hooks > @babel/core > browserslist
+  browserslist@<4.28.7: 4.29.3
+  baseline-browser-mapping@<2.11.0: 2.11.29

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { authApi } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import { Logo, Input, Btn, Alert, PasswordInput, PasswordRequirements } from './UI';
+import { capitalizar as capitalize, formatearTelefono as formatPhone, telefonoValido } from '../utils/formularios';
+import { contrasenaValida } from '../utils/contrasena';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -15,12 +17,6 @@ interface AuthModalProps {
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-const capitalize = (val: string) => val.replace(/(^|\s)\S/g, c => c.toUpperCase());
-const formatPhone = (val: string) => {
-  const digits = val.replace(/\D/g, '').slice(0, 10);
-  if (digits.length > 0 && digits[0] !== '3') return '3' + digits.slice(1, 10);
-  return digits;
-};
 
 // ── Tabs component ─────────────────────────────────────────────────────────
 
@@ -166,8 +162,8 @@ function RegisterForm({ onClose, onTabChange }: { onClose: () => void; onTabChan
         if (typeof raw[0] === 'string') {
           setCities(raw as string[]);
         } else {
-          const mapped = (raw as any[])
-            .map((item: any) => item.region_name ?? item.name ?? item.city ?? '')
+          const mapped = (raw as Array<Record<string, string | undefined>>)
+            .map((item) => item.region_name ?? item.name ?? item.city ?? '')
             .filter(Boolean)
             .sort() as string[];
           if (mapped.length > 0) setCities(mapped);
@@ -183,11 +179,9 @@ function RegisterForm({ onClose, onTabChange }: { onClose: () => void; onTabChan
     setForm(f => ({ ...f, [k]: val }));
   };
 
-  const passwordValid = form.password.length >= 8 &&
-    /[A-Z]/.test(form.password) && /[a-z]/.test(form.password) &&
-    /[0-9]/.test(form.password) && /[^A-Za-z0-9]/.test(form.password);
+  const passwordValid = contrasenaValida(form.password);
   const passwordsMatch = form.password === form.confirm;
-  const phoneValid = form.phone.length === 10 && form.phone.startsWith('3');
+  const phoneValid = telefonoValido(form.phone);
 
   const isComplete = form.first_name.trim() && form.last_name.trim() && phoneValid &&
     form.city && form.address.trim() && form.email.trim() && passwordValid && passwordsMatch;
@@ -249,8 +243,8 @@ function RegisterForm({ onClose, onTabChange }: { onClose: () => void; onTabChan
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
         <Input label="Teléfono *" placeholder="3001234567" value={form.phone} onChange={set('phone')} required inputMode="numeric" />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-600)' }}>Ciudad *</label>
-          <select value={form.city} onChange={set('city')} required
+          <label htmlFor="modal-city" style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-600)' }}>Ciudad *</label>
+          <select id="modal-city" value={form.city} onChange={set('city')} required
             style={{ ...inputStyle, color: form.city ? 'var(--gray-800)' : 'var(--gray-400)' }}
             onFocus={e => { e.target.style.borderColor = 'var(--violet)'; }}
             onBlur={e => { e.target.style.borderColor = 'var(--gray-200)'; }}

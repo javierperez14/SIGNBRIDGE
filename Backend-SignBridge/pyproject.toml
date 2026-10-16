@@ -1,0 +1,67 @@
+[project]
+name = "signbridge-backend"
+version = "1.0.0"
+description = "API REST de SignBridge: traducción texto/voz <-> Lengua de Señas Colombiana (FastAPI)"
+readme = "README.md"
+# mediapipe 0.10.14 publica ruedas hasta Python 3.12
+requires-python = ">=3.11,<3.13"
+
+# Versiones EXACTAS (==), sin rangos: el mismo código instala lo mismo en
+# todas las máquinas y en el CI. Para actualizar algo se cambia aquí, se
+# corre `uv lock` y se sube el uv.lock en el mismo PR.
+dependencies = [
+    "fastapi==0.143.0",
+    # starlette viene con fastapi; se fija aparte porque la versión que
+    # fastapi elegiría por defecto tenía vulnerabilidades (pip-audit).
+    "starlette==1.5.0",
+    "uvicorn[standard]==0.29.0",
+    "sqlalchemy==2.0.30",
+    "psycopg2-binary==2.9.9",
+    "pydantic[email]==2.12.5",
+    "pydantic-settings==2.2.1",
+    # PyJWT reemplaza a python-jose: jose tiene vulnerabilidades sin parche.
+    "PyJWT==2.15.1",
+    "passlib[bcrypt]==1.7.4",
+    "python-multipart==0.0.31",
+    "aiosmtplib==5.1.2",
+    "jinja2==3.1.6",
+    "python-dotenv==1.2.2",
+    "bcrypt==4.0.1",
+    # Procesamiento de imágenes y detección de señas (H03)
+    "Pillow==12.3.0",
+    "numpy==1.26.4",
+    "mediapipe==0.10.14",
+    "scikit-learn==1.9.1",
+    "joblib==1.6.0",
+    "reportlab==4.2.2",
+    "alembic==1.15.2",
+]
+
+[tool.uv]
+# Es una app, no una librería: uv no intenta empaquetarla.
+package = false
+
+[dependency-groups]
+dev = [
+    "pip-audit==2.9.0",
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+]
+
+[tool.pytest]
+pythonpath = ["."]
+testpaths = ["tests"]
+# Cada "uv run pytest" mide la cobertura y falla si baja del umbral
+addopts = ["--cov", "--cov-report=term-missing"]
+
+[tool.coverage.run]
+source = ["app"]
+omit = [
+    # Arranque de la app: solo registra routers y middlewares
+    "app/main.py",
+]
+
+[tool.coverage.report]
+# Umbral de la semana 3 = max(30, real de S2). Solo puede subir:
+# ver docs/matriz-rotacion.md
+fail_under = 31
