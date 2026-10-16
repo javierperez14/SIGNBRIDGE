@@ -41,10 +41,24 @@ cd Frontend-SignBridge && pnpm dev     # http://localhost:5173 → API en localh
 
 | Capa | Dónde | Comando |
 |---|---|---|
-| Unitarias frontend (Vitest + cobertura) | `Frontend-SignBridge/src/**/*.test.ts(x)` | `cd Frontend-SignBridge && pnpm test` |
+| Unitarias y componentes frontend (Vitest + RTL + cobertura) | `Frontend-SignBridge/src/**/*.test.ts(x)` | `cd Frontend-SignBridge && pnpm test` |
 | Unitarias backend (pytest + cobertura) | `Backend-SignBridge/tests/` | `cd Backend-SignBridge && uv run pytest` |
 | E2E (Playwright) | `e2e/tests/` | ver [`e2e/README.md`](e2e/README.md) |
 
 La cobertura se mide en cada corrida y el comando **falla** si baja del umbral. El historial está en [`docs/matriz-rotacion.md`](docs/matriz-rotacion.md).
 
-Documentación del equipo: [flujo de Git](docs/flujo-git.md) · [auditoría de dependencias](docs/seguridad-dependencias.md) · [base de datos](Base-de-datos/README.md)
+## Documentación
+
+| Documento | Contenido |
+|---|---|
+| [Estrategia de pruebas](docs/estrategia-pruebas.md) | Qué prueba cada capa, umbrales y hallazgos (para la sustentación) |
+| [Matriz de rotación](docs/matriz-rotacion.md) | Capa de cada integrante por semana y cobertura semanal |
+| [Flujo de Git](docs/flujo-git.md) | Ramas `main`/`develop`, Conventional Commits, PR |
+| [Auditoría de dependencias](docs/seguridad-dependencias.md) | Vulnerabilidades corregidas y riesgos aceptados |
+| [Base de datos](Base-de-datos/README.md) | Contextualización, diagrama relacional, DDL y DML |
+
+## Ramas
+
+- `main`: lo que se entrega. Solo recibe PR desde `develop`.
+- `develop`: integración. Solo recibe PR desde ramas `feat/`, `fix/`, `test/`, `docs/`, `build/`, `ci/`…
+- Todo PR necesita el CI en verde (`frontend`, `backend`, `auditoria`).
