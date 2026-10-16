@@ -18,3 +18,8 @@ os.environ.update(
         "MAIL_FROM": "test@example.com",
     }
 )
+
+# SQLAlchemy resuelve las relaciones entre modelos por nombre ("Message",
+# "User"...): todos tienen que estar importados antes de crear un objeto,
+# igual que hace app/main.py al arrancar.
+from app.models import message, session, user  # noqa: E402,F401
