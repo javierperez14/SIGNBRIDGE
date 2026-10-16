@@ -12,6 +12,11 @@ describe('contrasenaValida', () => {
     ['Abcdefg*', false, 'sin número'],
     ['Abcdefg1', false, 'sin carácter especial'],
     ['',         false, 'vacía'],
+    // Mismas reglas que el backend (_validate_strong_password):
+    ['Contraseña1',  false, 'la ñ es letra, no carácter especial'],
+    ['Contraseña1*', true,  'con ñ y un especial de la lista'],
+    ['ÁRBOLES1*',    false, 'tildes en mayúscula no cuentan como minúscula'],
+    ['Abcdef1 ',     false, 'el espacio no es carácter especial'],
   ])('"%s" → %s (%s)', (password, esperado) => {
     expect(contrasenaValida(password)).toBe(esperado);
   });
