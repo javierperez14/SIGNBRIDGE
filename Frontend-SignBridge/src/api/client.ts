@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+// En Docker el frontend lo sirve Nginx y la API va por el mismo dominio en /api
+// (VITE_API_URL=/api en el build). En desarrollo con `pnpm dev` apunta directo
+// al backend. Ver Frontend-SignBridge/.env.example.
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 const api = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
 });
 
