@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { authApi } from '../api/client';
 import { Logo, Btn, Alert, Card, Input, PasswordInput, PasswordRequirements } from '../components/UI';
 import { Footer } from '../components/Footer';
+import { contrasenaValida } from '../utils/contrasena';
 
 // ── Componente de countdown reutilizable ──────────────────────────────────────
 function RedirectCountdown({ seconds, to, navigate }: { seconds: number; to: string; navigate: ReturnType<typeof useNavigate> }) {
@@ -153,12 +154,7 @@ export function ResetPassword() {
     e.preventDefault();
     setError('');
 
-    const hasUpper = /[A-Z]/.test(password);
-    const hasLower = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSpecial = /[^A-Za-z0-9]/.test(password);
-
-    if (password.length < 8 || !hasUpper || !hasLower || !hasNumber || !hasSpecial) {
+    if (!contrasenaValida(password)) {
       setError('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial');
       return;
     }
@@ -220,14 +216,7 @@ export function ResetPassword() {
                 loading={loading}
                 size="lg"
                 style={{ width: '100%' }}
-                disabled={
-                  password.length < 8 ||
-                  !/[A-Z]/.test(password) ||
-                  !/[a-z]/.test(password) ||
-                  !/[0-9]/.test(password) ||
-                  !/[^A-Za-z0-9]/.test(password) ||
-                  password !== confirm
-                }
+                disabled={!contrasenaValida(password) || password !== confirm}
               >
                 Restablecer contraseña
               </Btn>
