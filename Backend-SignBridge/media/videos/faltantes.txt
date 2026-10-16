@@ -1,0 +1,12 @@
+agua|https://youtube.com/embed/XfeZ5MImPwo
+amigo|https://youtube.com/embed/gcchAeDnQLg
+aprender|https://youtube.com/embed/5I9hv6h7vns
+ayudar|https://youtube.com/embed/o1iZE3I4rrE
+buenas_noches|https://youtube.com/embed/B532Q7ZTOJE
+comer|https://youtube.com/embed/-leTGMVMck0
+entender|https://youtube.com/embed/ueRgvsfjOI0
+estudiar|https://youtube.com/embed/bmkZhSiky0g
+familia|https://youtube.com/embed/a2s5u_oBWNI
+gracias|https://youtube.com/embed/iM8ErA1Uw6Q
+hola|https://youtube.com/embed/vVNXT0FBVOE
+trabajar|https://youtube.com/embed/pw6Dp-_bODQ
