@@ -246,6 +246,14 @@ def detect_sign_from_frame(
 # H08 / H16 — Traducción de texto a LSC
 # ─────────────────────────────────────────────────────────────────────────────
 
+# Palabras funcionales que LSC suele omitir
+LSC_OMIT = {
+    "el", "la", "los", "las", "un", "una", "unos", "unas",
+    "de", "del", "al", "a", "en", "con", "por", "para",
+    "que", "es", "son", "está", "están", "se",
+}
+
+
 def translate_text_to_lsc(
     text: str,
     db: Session,
@@ -262,22 +270,12 @@ def translate_text_to_lsc(
       - El orden SVO se mantiene para oraciones simples.
       - Las palabras sin traducción directa se intentan como letras deletreadas.
     """
-    # Palabras funcionales que LSC suele omitir
-    LSC_OMIT = {
-        "el", "la", "los", "las", "un", "una", "unos", "unas",
-        "de", "del", "al", "a", "en", "con", "por", "para",
-        "que", "es", "son", "está", "están", "se",
-    }
-
     tokens = _tokenize(text)
     if not tokens:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="No se encontraron palabras válidas en el texto.",
         )
-
-    signs: List[dict] = []
-    untranslated: List[str] = []
 
     # El diccionario se consulta UNA vez, no dentro del bucle: antes se hacía
     # un SELECT completo por cada palabra del texto.
@@ -286,6 +284,20 @@ def translate_text_to_lsc(
         .filter(LexicalUnit.deleted_at.is_(None))
         .all()
     )
+    return traducir_tokens(tokens, lexical_units)
+
+
+def traducir_tokens(
+    tokens: List[str],
+    lexical_units: List[LexicalUnit],
+) -> Tuple[List[dict], List[str]]:
+    """
+    Lógica pura de la traducción: recibe las palabras y el diccionario y
+    decide qué seña corresponde a cada una. No toca la base de datos, así que
+    se prueba con tests unitarios (tests/test_traduccion.py).
+    """
+    signs: List[dict] = []
+    untranslated: List[str] = []
 
     # Índice normalizado -> seña. Muchas entradas del diccionario son frases de
     # varias palabras ("buenas noches", "buenos días"), así que se guarda además
