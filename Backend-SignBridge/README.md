@@ -6,31 +6,35 @@ API REST construida con **FastAPI + PostgreSQL** para la aplicación de traducci
 
 ## Requisitos
 
-- Python 3.11+
-- PostgreSQL 14+ con la base de datos `sign_bridge` ya creada y el script SQL ejecutado
+- [uv](https://docs.astral.sh/uv/) (gestor de paquetes de Python)
+- PostgreSQL 17 con la base creada (ver `../Base-de-datos/`) — o usa `docker compose` desde la raíz
 
 ---
 
 ## Instalación rápida
 
 ```bash
-# 1. Clonar / descomprimir el proyecto
-cd sign_bridge
+cd Backend-SignBridge
 
-# 2. Crear entorno virtual
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+# 1. Instalar Python 3.12 y las dependencias EXACTAS de uv.lock
+uv sync
 
-# 3. Instalar dependencias
-pip install -r requirements.txt
-
-# 4. Configurar variables de entorno
+# 2. Configurar variables de entorno
 cp .env.example .env
 # Edita .env con tus credenciales de PostgreSQL y Mailtrap
 
-# 5. Arrancar el servidor
-uvicorn app.main:app --reload --port 8000
+# 3. Arrancar el servidor
+uv run uvicorn app.main:app --reload --port 8000
 ```
+
+### Agregar o actualizar una dependencia
+
+```bash
+uv add paquete==1.2.3      # siempre con versión exacta
+uv lock                    # regenera uv.lock
+```
+
+Sube `pyproject.toml` **y** `uv.lock` en el mismo commit.
 
 La API queda disponible en: http://localhost:8000  
 Documentación interactiva: http://localhost:8000/docs
@@ -112,7 +116,8 @@ sign_bridge/
 │   └── routers/
 │       ├── auth.py          # /auth/*
 │       └── dashboard.py     # /dashboard/*
-├── requirements.txt
+├── pyproject.toml   # dependencias con versión exacta
+├── uv.lock          # versiones resueltas (se sube al repo)
 ├── .env.example
 └── README.md
 ```
