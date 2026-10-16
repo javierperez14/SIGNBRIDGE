@@ -323,8 +323,10 @@ export function Alert({ type, message }: { type: 'error' | 'success' | 'info'; m
     info: { bg: 'var(--violet-light)', border: 'var(--gray-200)', text: 'var(--violet)' },
   };
   const c = colors[type];
+  // role="alert" hace que el lector de pantalla anuncie los errores apenas
+  // aparecen; los avisos de éxito/info usan "status", que no interrumpe.
   return (
-    <div style={{ padding: '10px 14px', borderRadius: 'var(--radius-sm)', background: c.bg, border: `1px solid ${c.border}`, color: c.text, fontSize: '0.85rem', fontWeight: 500 }}>
+    <div role={type === 'error' ? 'alert' : 'status'} style={{ padding: '10px 14px', borderRadius: 'var(--radius-sm)', background: c.bg, border: `1px solid ${c.border}`, color: c.text, fontSize: '0.85rem', fontWeight: 500 }}>
       {message}
     </div>
   );
