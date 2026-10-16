@@ -187,13 +187,6 @@ export default function VoiceToSign() {
     if (transcript) setTextInput(transcript);
   }, [transcript]);
 
-  useEffect(() => {
-    if (speechState === 'processing' && transcript.trim()) {
-      handleTranslate(transcript.trim(), 'voice');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speechState]);
-
   const handleTranslate = useCallback(async (text?: string, inputMode: TranslationMode = 'text') => {
     const input = (text ?? textInput).trim();
     if (!input) return;
@@ -250,6 +243,14 @@ export default function VoiceToSign() {
       setIsTranslating(false);
     }
   }, [textInput, activeSessionId]);
+
+  // Va DESPUÉS de handleTranslate: usar una const antes de declararla es un error de lint
+  useEffect(() => {
+    if (speechState === 'processing' && transcript.trim()) {
+      handleTranslate(transcript.trim(), 'voice');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [speechState]);
 
   const handleVoiceToggle = useCallback(() => {
     if (speechState === 'listening') {

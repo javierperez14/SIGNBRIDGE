@@ -43,7 +43,7 @@ export function VideoModal({ unit, onClose, onSave }: {
       if (modo === 'archivo') {
         if (!archivo) { setError('Elegí un archivo de video'); setSaving(false); return; }
         const { data } = await dashboardApi.uploadLexicalUnitVideo(unit.id_lexicalunit, archivo);
-        await onSave(data.id_lexicalunit, data.video_url);
+        await onSave(data.id_lexicalunit, data.video_url ?? null);
       } else {
         await onSave(unit.id_lexicalunit, url.trim() || null);
       }

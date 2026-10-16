@@ -166,8 +166,8 @@ function RegisterForm({ onClose, onTabChange }: { onClose: () => void; onTabChan
         if (typeof raw[0] === 'string') {
           setCities(raw as string[]);
         } else {
-          const mapped = (raw as any[])
-            .map((item: any) => item.region_name ?? item.name ?? item.city ?? '')
+          const mapped = (raw as Array<Record<string, string | undefined>>)
+            .map((item) => item.region_name ?? item.name ?? item.city ?? '')
             .filter(Boolean)
             .sort() as string[];
           if (mapped.length > 0) setCities(mapped);
