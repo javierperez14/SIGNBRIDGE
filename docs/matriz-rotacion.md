@@ -23,9 +23,12 @@ Reglas:
 
 Anota la cobertura real al cerrar cada semana. El umbral de la semana siguiente es el mayor entre el piso del plan y este valor, redondeado hacia abajo.
 
+> El piso del plan se mide en **líneas**. Las demás métricas de Vitest (sentencias, funciones, ramas) quedan fijadas en su valor real como trinquete: tampoco pueden bajar.
+
 | Semana | Frontend (%) | Backend (%) | Umbral configurado para la semana siguiente |
 |---|---|---|---|
 | S1 (línea base) | 0 | 0 | 30 (piso de la semana 2) |
+| S2 | 34,04 | 31,60 | Front: líneas 34 (sentencias 32, funciones 27, ramas 27) · Back: 31 |
 
 ## Regla de rama
 
