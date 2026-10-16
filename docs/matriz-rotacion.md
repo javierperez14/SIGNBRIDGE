@@ -31,7 +31,7 @@ Anota la cobertura real al cerrar cada semana. El umbral de la semana siguiente 
 
 | Repo | Regla |
 |---|---|
-| javierperez14/SIGNBRIDGE | Pendiente: se activa en el PR del CI |
+| javierperez14/SIGNBRIDGE | Ruleset **"CI obligatorio en main y develop"**: PR obligatorio + checks `frontend`, `backend` y `auditoría` en verde (Settings → Rules → Rulesets). Mientras no esté activo: regla manual, nadie fusiona con el CI en rojo |
 
 ## Registro de vocero aleatorio
 

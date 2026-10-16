@@ -1,0 +1,107 @@
+# ==============================================================================
+# CI de SignBridge: corre en cada PR y en cada push a main/develop.
+#
+#   frontend   → lint + build + tests unitarios con umbral de cobertura (Vitest)
+#   backend    → tests unitarios con umbral de cobertura (pytest-cov)
+#   auditoria  → vulnerabilidades conocidas en dependencias (pnpm audit, pip-audit)
+#
+# Los comandos son LOS MISMOS que se corren en local. El umbral vive en la
+# configuración de cada proyecto (vite.config.ts, pyproject.toml), así que el
+# CI no sabe nada de cobertura: si el comando falla, el job queda en rojo.
+# ==============================================================================
+name: tests
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+# Mínimo privilegio: el CI solo necesita leer el código
+permissions:
+  contents: read
+
+# Un push nuevo al mismo PR cancela la corrida anterior (ahorra minutos)
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: frontend (lint + build + vitest)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: Frontend-SignBridge
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          package_json_file: Frontend-SignBridge/package.json
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: Frontend-SignBridge/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm build
+      - run: pnpm test
+      # El reporte HTML de cobertura queda descargable desde la pestaña Actions
+      - uses: actions/upload-artifact@v7.0.1
+        if: always()
+        with:
+          name: coverage-frontend
+          path: Frontend-SignBridge/coverage/
+          retention-days: 7
+
+  backend:
+    name: backend (pytest)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: Backend-SignBridge
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: Backend-SignBridge/uv.lock
+      # --frozen: falla si uv.lock no corresponde con pyproject.toml
+      - run: uv sync --frozen
+      - run: uv run pytest --cov-report=html
+      - uses: actions/upload-artifact@v7.0.1
+        if: always()
+        with:
+          name: coverage-backend
+          path: Backend-SignBridge/htmlcov/
+          retention-days: 7
+
+  auditoria:
+    name: auditoría de dependencias
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: pnpm/action-setup@v6.1.0
+        with:
+          package_json_file: Frontend-SignBridge/package.json
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: "22"
+      - name: pnpm audit (frontend)
+        working-directory: Frontend-SignBridge
+        run: pnpm audit --audit-level=moderate
+      - name: pnpm audit (e2e)
+        working-directory: e2e
+        run: pnpm audit --audit-level=moderate
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: Backend-SignBridge/uv.lock
+      - name: pip-audit (backend)
+        working-directory: Backend-SignBridge
+        # PYSEC-2026-1805 (protobuf) es un riesgo aceptado y documentado en
+        # docs/seguridad-dependencias.md. Cualquier aviso NUEVO hace fallar el job.
+        run: |
+          uv export --frozen --no-dev --format requirements-txt --no-hashes > /tmp/requirements.txt
+          uv run --frozen pip-audit -r /tmp/requirements.txt --no-deps --disable-pip \
+            --ignore-vuln PYSEC-2026-1805
