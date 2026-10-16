@@ -533,7 +533,7 @@ def _try_fingerspell(
         if not char.isalpha():
             continue
         match = next(
-            (lu for lu in lexical_units if lu.text.upper() == char),
+            (lu for lu in lexical_units if (lu.text or "").upper() == char),
             None,
         )
         if match is None:
