@@ -181,11 +181,13 @@ INSERT INTO "Role" (id_role, role_name) VALUES ('55637b88-a8ad-41da-9a3a-e81ef5b
 INSERT INTO "Role" (id_role, role_name) VALUES ('ddf2ef51-134f-4880-907f-31cc67fa8d05', 'Soporte');
 
 -- ── 4. Usuarios demo (contraseña de los tres: SignBridge2026*) ───────
+-- Dominio example.com: reservado para ejemplos (RFC 2606) y aceptado por el
+-- validador de correos del backend (".test" lo rechaza como dominio especial).
 -- Hash bcrypt generado para este archivo; no corresponde a nadie real.
 INSERT INTO "User" (id_user, id_role, first_name, last_name, phone, city, email, password_hash)
 VALUES
-  ('00000000-0000-4000-8000-000000000001', 'a9ca9e91-a269-47aa-8255-7e873eb886a1', 'Admin', 'Demo',   '3000000001', 'Bogotá', 'admin@signbridge.test',   '$2b$12$pb9gxWCs90LYu5LMvnXU8.RUgP4IVzpylh36DVGNJa77ngZjgmhtK'),
-  ('00000000-0000-4000-8000-000000000002', 'ddf2ef51-134f-4880-907f-31cc67fa8d05', 'Soporte', 'Demo', '3000000002', 'Bogotá', 'soporte@signbridge.test', '$2b$12$pb9gxWCs90LYu5LMvnXU8.RUgP4IVzpylh36DVGNJa77ngZjgmhtK'),
-  ('00000000-0000-4000-8000-000000000003', '55637b88-a8ad-41da-9a3a-e81ef5b27b3f', 'Cliente', 'Demo', '3000000003', 'Bogotá', 'cliente@signbridge.test', '$2b$12$pb9gxWCs90LYu5LMvnXU8.RUgP4IVzpylh36DVGNJa77ngZjgmhtK');
+  ('00000000-0000-4000-8000-000000000001', 'a9ca9e91-a269-47aa-8255-7e873eb886a1', 'Admin', 'Demo',   '3000000001', 'Bogotá', 'admin.demo@example.com',   '$2b$12$pb9gxWCs90LYu5LMvnXU8.RUgP4IVzpylh36DVGNJa77ngZjgmhtK'),
+  ('00000000-0000-4000-8000-000000000002', 'ddf2ef51-134f-4880-907f-31cc67fa8d05', 'Soporte', 'Demo', '3000000002', 'Bogotá', 'soporte.demo@example.com', '$2b$12$pb9gxWCs90LYu5LMvnXU8.RUgP4IVzpylh36DVGNJa77ngZjgmhtK'),
+  ('00000000-0000-4000-8000-000000000003', '55637b88-a8ad-41da-9a3a-e81ef5b27b3f', 'Cliente', 'Demo', '3000000003', 'Bogotá', 'cliente.demo@example.com', '$2b$12$pb9gxWCs90LYu5LMvnXU8.RUgP4IVzpylh36DVGNJa77ngZjgmhtK');
 
 COMMIT;
