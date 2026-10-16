@@ -12,12 +12,12 @@ Reglas:
 
 | Integrante (usuario GitHub) | S1 | S2 | S3 | S4 | S5 | S6 | S7 | S8 | S9 |
 |---|---|---|---|---|---|---|---|---|---|
-| @javierperez14 | E2E | | | | | | | | |
-| @juan-soto350 | E2E | | | | | | | | |
-| @Sebas-p-s | E2E | | | | | | | | |
-| @Lincoln1986 | E2E | | | | | | | | |
+| @javierperez14 | E2E | API | | | | | | | |
+| @juan-soto350 | E2E | Front | | | | | | | |
+| @Sebas-p-s | E2E | BD | | | | | | | |
+| @Lincoln1986 | E2E | E2E (CI) | | | | | | | |
 
-> S2: cada uno escoge una capa **distinta** a E2E (Front, API, BD) y quien monte el CI hace también sus 3 tests unitarios en cualquier capa. Pónganse de acuerdo y llenen la columna en un PR.
+> S2: Front, API y BD son distintas a la capa de S1. En un grupo de 4 alguien repite E2E: esta semana esa capa **monta el CI** (receta de CI) y además escribe sus 3 tests unitarios en cualquier capa. Por eso @Lincoln1986 la toma, y en S3 rota a una capa que no haya tenido.
 
 ## Cobertura semanal
 
@@ -31,7 +31,7 @@ Anota la cobertura real al cerrar cada semana. El umbral de la semana siguiente 
 
 | Repo | Regla |
 |---|---|
-| | <!-- "Ruleset activo en main y develop" o "Regla manual: nadie fusiona con el CI en rojo" --> |
+| javierperez14/SIGNBRIDGE | Pendiente: se activa en el PR del CI |
 
 ## Registro de vocero aleatorio
 
