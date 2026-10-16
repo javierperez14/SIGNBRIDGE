@@ -29,4 +29,9 @@ export default defineConfig([
       'react-refresh/only-export-components': 'warn',
     },
   },
+  {
+    // Fast Refresh (recarga en caliente) no aplica a los tests
+    files: ['src/test/**', 'src/**/*.test.{ts,tsx}'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
 ])

@@ -15,6 +15,7 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     // Semana 1: todavía no hay tests unitarios; la línea base es 0%.
     passWithNoTests: true,
@@ -25,6 +26,7 @@ export default defineConfig({
       exclude: [
         'src/main.tsx',        // arranque: solo monta <App />, no tiene lógica de negocio
         'src/**/*.test.{ts,tsx}',
+        'src/test/**',         // configuración de los tests
         'src/**/*.d.ts',       // solo tipos, no se ejecutan
       ],
       reporter: ['text', 'html'],
