@@ -249,8 +249,8 @@ function RegisterForm({ onClose, onTabChange }: { onClose: () => void; onTabChan
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
         <Input label="Teléfono *" placeholder="3001234567" value={form.phone} onChange={set('phone')} required inputMode="numeric" />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-600)' }}>Ciudad *</label>
-          <select value={form.city} onChange={set('city')} required
+          <label htmlFor="modal-city" style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-600)' }}>Ciudad *</label>
+          <select id="modal-city" value={form.city} onChange={set('city')} required
             style={{ ...inputStyle, color: form.city ? 'var(--gray-800)' : 'var(--gray-400)' }}
             onFocus={e => { e.target.style.borderColor = 'var(--violet)'; }}
             onBlur={e => { e.target.style.borderColor = 'var(--gray-200)'; }}
