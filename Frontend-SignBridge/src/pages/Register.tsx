@@ -52,8 +52,8 @@ export default function Register() {
           setCities(raw as string[]);
         } else {
           // Objetos con region_name / name / city
-          const mapped = (raw as any[])
-            .map((item: any) => item.region_name ?? item.name ?? item.city ?? '')
+          const mapped = (raw as Array<Record<string, string | undefined>>)
+            .map((item) => item.region_name ?? item.name ?? item.city ?? '')
             .filter(Boolean)
             .sort() as string[];
           if (mapped.length > 0) setCities(mapped);

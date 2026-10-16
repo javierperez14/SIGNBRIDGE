@@ -1,3 +1,4 @@
+import { isAxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { dashboardApi, feedbackApi, supportApi, favoritesApi, lastSession, statsApi, authApi } from '../api/client';
@@ -208,8 +209,8 @@ function DeleteAccountModal({
     try {
       await authApi.deleteAccount(password);
       onDeleted();
-    } catch (err: any) {
-      if (err?.response?.status === 401) {
+    } catch (err: unknown) {
+      if (isAxiosError(err) && err.response?.status === 401) {
         setError('Contraseña incorrecta.');
       } else {
         setError('No se pudo eliminar la cuenta. Intenta de nuevo.');
