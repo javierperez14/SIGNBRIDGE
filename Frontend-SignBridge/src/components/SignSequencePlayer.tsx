@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { esYouTube, idDeYouTube, urlCompleta } from '../utils/video';
 
 /**
  * Reproductor en secuencia de las señas de una traducción.
@@ -24,16 +25,6 @@ export interface SignClip {
 // ── URL base del backend, para armar rutas completas de videos locales ──────
 // Los videos locales llegan del backend como ruta relativa (/media/videos/xxx.mp4).
 // Sin esto, el navegador la busca en el origen del FRONTEND en vez del backend.
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-
-function urlCompleta(url: string): string {
-  if (!url) return url;
-  if (url.startsWith('http://') || url.startsWith('https://')) return url;
-  return `${API_BASE}${url}`;
-}
-
-// ── Carga única de la IFrame Player API ─────────────────────────────────────
-
 type YTPlayer = {
   loadVideoById: (id: string) => void;
   playVideo: () => void;
@@ -72,24 +63,6 @@ function cargarYouTubeAPI(): Promise<void> {
   });
   return apiPromise;
 }
-
-/** Saca el id del video de cualquier formato de URL de YouTube. */
-export function idDeYouTube(url: string): string | null {
-  if (!url) return null;
-  const embed = url.match(/youtube\.com\/embed\/([^?&/]+)/);
-  if (embed) return embed[1];
-  const corto = url.match(/youtu\.be\/([^?&/]+)/);
-  if (corto) return corto[1];
-  const largo = url.match(/[?&]v=([^?&]+)/);
-  if (largo) return largo[1];
-  return null;
-}
-
-export function esYouTube(url: string): boolean {
-  return !!url && (url.includes('youtube.com') || url.includes('youtu.be'));
-}
-
-// ── Componente ──────────────────────────────────────────────────────────────
 
 export function SignSequencePlayer({ clips }: { clips: SignClip[] }) {
   const [indice, setIndice]       = useState(0);

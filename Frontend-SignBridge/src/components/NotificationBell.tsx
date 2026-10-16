@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { notificationsApi } from '../api/client';
 import type { NotificationItem } from '../api/client';
+import { tiempoRelativo } from '../utils/fechas';
 
 /**
  * Campana de notificaciones del menú.
@@ -23,18 +24,6 @@ const ICONOS: Record<string, string> = {
 /** Todos los avisos llevan a la sección de notificaciones, que sirve para
  *  los tres roles. Antes iban a /dashboard, que para un Admin no aplica. */
 const DESTINO = '/notifications';
-
-/** "hace 5 min", "ayer", "12 ago" */
-function tiempoRelativo(iso?: string | null): string {
-  if (!iso) return '';
-  const fecha = new Date(iso);
-  const segundos = Math.floor((Date.now() - fecha.getTime()) / 1000);
-  if (segundos < 60)    return 'recién';
-  if (segundos < 3600)  return `hace ${Math.floor(segundos / 60)} min`;
-  if (segundos < 86400) return `hace ${Math.floor(segundos / 3600)} h`;
-  if (segundos < 172800) return 'ayer';
-  return fecha.toLocaleDateString('es-CO', { day: 'numeric', month: 'short' });
-}
 
 export function NotificationBell() {
   const navigate = useNavigate();

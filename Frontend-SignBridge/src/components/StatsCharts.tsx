@@ -5,6 +5,7 @@ import {
   LineChart, Line, CartesianGrid, LabelList,
 } from 'recharts';
 import type { SystemStats, TopWordRow, TranslationTypeRow, ActivityRow } from '../api/client';
+import { colorPorRating } from '../utils/calificacion';
 
 // Estilos del tooltip y de los ejes para el tema oscuro.
 // Recharts dibuja su propio DOM y no usa nuestras variables CSS,
@@ -190,14 +191,6 @@ const CANAL_ETIQUETAS: Record<string, string> = {
 };
 
 const CANAL_COLORES = ['#2823BC', '#D66A35', '#27A85F', '#E5534B'];
-
-/** Color de la barra según qué tan bien calificada está la traducción. */
-function colorPorRating(rating?: number | null): string {
-  if (rating == null) return '#8B5CF6';   // violeta: usada pero aún sin calificar
-  if (rating >= 4) return '#27A85F';      // verde: traducción confiable
-  if (rating >= 3) return '#D66A35';      // ámbar: revisar
-  return '#E5534B';                       // rojo: mal calificada, urge revisar
-}
 
 /**
  * Ranking horizontal de las señas más traducidas.
