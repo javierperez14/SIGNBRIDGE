@@ -10,11 +10,10 @@
 -- Uso (base vacía):
 --   psql -U postgres -d signbridge -f 03-scripts-ddl.sql
 --
--- Nota: desde la rama chore/alembic la fuente de verdad del esquema son
+-- Nota: desde la rama feat/alembic-migraciones la fuente de verdad son
 -- las migraciones de Alembic. Este archivo queda como documentación.
 -- =====================================================================
 
-\restrict 7DXxFXMtRMgqx37rhRTBvuQJSopLzaREqwAW5lSrIZ8xwmdyzOiqtK3GVMjlRL4
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
@@ -464,5 +463,3 @@ ALTER TABLE ONLY public."User"
 
 ALTER TABLE ONLY public."VoiceInput"
     ADD CONSTRAINT fk_voice_session FOREIGN KEY (id_session) REFERENCES public."TranslationSession"(id_session);
-
-\unrestrict 7DXxFXMtRMgqx37rhRTBvuQJSopLzaREqwAW5lSrIZ8xwmdyzOiqtK3GVMjlRL4

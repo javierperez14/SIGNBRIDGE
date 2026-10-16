@@ -121,3 +121,30 @@ sign_bridge/
 ├── .env.example
 └── README.md
 ```
+
+---
+
+## Migraciones (Alembic)
+
+El esquema de la base se versiona con **Alembic**, igual que el código: cada cambio a una tabla es un archivo en `alembic/versions/` que se sube en un PR.
+
+| Migración | Qué hace |
+|---|---|
+| `0001_baseline_esquema_inicial` | Crea el esquema completo (tablas, vistas, funciones, triggers). Si la base **ya tiene** las tablas, no toca nada y solo la marca |
+| `0002_seed_catalogos` | Inserta roles, regiones y unidades léxicas (`ON CONFLICT DO NOTHING`) |
+
+```bash
+uv run alembic upgrade head        # aplica lo pendiente (docker compose lo hace solo al arrancar)
+uv run alembic current             # en qué versión está tu base
+uv run alembic history             # lista de migraciones
+
+# Cambiar el esquema:
+# 1. Edita el modelo en app/models/
+# 2. Genera la migración y REVÍSALA antes de subirla
+uv run alembic revision --autogenerate -m "agregar columna x a User"
+uv run alembic upgrade head
+```
+
+> La URL de la base sale de `DATABASE_URL` (tu `.env`). `alembic.ini` no tiene contraseñas.
+>
+> Los scripts sueltos de `migrations/*.sql` se retiraron: sus cambios (`is_active`, tabla `Message`, limpieza de roles) ya están dentro de la baseline.
