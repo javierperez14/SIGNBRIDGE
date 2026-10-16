@@ -13,6 +13,6 @@ psql -U postgres -d signbridge -f 03-scripts-ddl.sql
 psql -U postgres -d signbridge -f 04-scripts-dml.sql
 ```
 
-Usuarios demo (contraseña `SignBridge2026*`): `admin@signbridge.test`, `soporte@signbridge.test`, `cliente@signbridge.test`.
+Usuarios demo (contraseña `SignBridge2026*`): `admin.demo@example.com`, `soporte.demo@example.com`, `cliente.demo@example.com`.
 
 > ⚠️ Los respaldos completos (`pg_dump`) **no se suben**: tienen datos personales. El `.gitignore` bloquea `respaldo*.sql` y `backup*.sql`.
