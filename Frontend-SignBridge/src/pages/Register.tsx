@@ -186,8 +186,9 @@ export default function Register() {
                 )}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--gray-600)' }}>Ciudad *</label>
+                <label htmlFor="register-city" style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--gray-600)' }}>Ciudad *</label>
                 <select
+                  id="register-city"
                   value={form.city}
                   onChange={set('city')}
                   required

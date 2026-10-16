@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { ReactNode, InputHTMLAttributes } from 'react';
 
 // ── Logo ───────────────────────────────────────────────────────────────────
@@ -74,13 +74,19 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: ReactNode;
 }
 
-export function Input({ label, error, icon, style, ...rest }: InputProps) {
+export function Input({ label, error, icon, style, id, ...rest }: InputProps) {
+  // El <label> queda asociado al <input> (htmlFor/id): lo usan los lectores de
+  // pantalla y permite ubicar el campo en los tests con getByLabel('Correo…').
+  const autoId = useId();
+  const inputId = id ?? autoId;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5, width: '100%' }}>
-      {label && <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--gray-600)' }}>{label}</label>}
+      {label && <label htmlFor={inputId} style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--gray-600)' }}>{label}</label>}
       <div style={{ position: 'relative' }}>
         {icon && <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--gray-400)', display: 'flex' }}>{icon}</span>}
         <input
+          id={inputId}
+          aria-invalid={error ? true : undefined}
           style={{
             width: '100%', padding: icon ? '10px 14px 10px 38px' : '10px 14px',
             border: `1.5px solid ${error ? 'var(--danger)' : 'var(--gray-200)'}`,
@@ -133,15 +139,17 @@ interface PasswordInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   strengthValue?: string;
 }
 
-export function PasswordInput({ label, error, showStrength, strengthValue, style, ...rest }: PasswordInputProps) {
+export function PasswordInput({ label, error, showStrength, strengthValue, style, id, ...rest }: PasswordInputProps) {
   const [visible, setVisible] = useState(false);
+  const autoId = useId();
+  const inputId = id ?? autoId;
   const val = String(strengthValue ?? rest.value ?? '');
   const strength = showStrength ? getPasswordStrength(val) : null;
   const meta = strength ? strengthMeta[strength] : null;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5, width: '100%' }}>
-      {label && <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--gray-600)' }}>{label}</label>}
+      {label && <label htmlFor={inputId} style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--gray-600)' }}>{label}</label>}
       <div style={{ position: 'relative' }}>
         {/* lock icon */}
         <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--gray-400)', display: 'flex', pointerEvents: 'none' }}>
@@ -151,6 +159,8 @@ export function PasswordInput({ label, error, showStrength, strengthValue, style
           </svg>
         </span>
         <input
+          id={inputId}
+          aria-invalid={error ? true : undefined}
           type={visible ? 'text' : 'password'}
           style={{
             width: '100%',
