@@ -17,8 +17,6 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
-    // Semana 1: todavía no hay tests unitarios; la línea base es 0%.
-    passWithNoTests: true,
     coverage: {
       provider: 'v8',
       // Se mide toda la lógica de la interfaz.
@@ -30,9 +28,10 @@ export default defineConfig({
         'src/**/*.d.ts',       // solo tipos, no se ejecutan
       ],
       reporter: ['text', 'html'],
-      // Umbral = línea base. Si la cobertura baja de aquí, "pnpm test" falla.
-      // Solo puede subir: ver docs/matriz-rotacion.md
-      thresholds: { lines: 0, branches: 0, functions: 0, statements: 0 },
+      // Umbral de la semana 3 = max(30, real de S2) redondeado hacia abajo.
+      // Si la cobertura baja de aquí, "pnpm test" falla. Solo puede subir:
+      // ver docs/matriz-rotacion.md
+      thresholds: { lines: 34, statements: 32, functions: 27, branches: 27 },
     },
   },
 })
