@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -10,6 +11,26 @@ export default defineConfig({
     watch: {
       usePolling: true,
       interval: 300,
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    include: ['src/**/*.test.{ts,tsx}'],
+    // Semana 1: todavía no hay tests unitarios; la línea base es 0%.
+    passWithNoTests: true,
+    coverage: {
+      provider: 'v8',
+      // Se mide toda la lógica de la interfaz.
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'src/main.tsx',        // arranque: solo monta <App />, no tiene lógica de negocio
+        'src/**/*.test.{ts,tsx}',
+        'src/**/*.d.ts',       // solo tipos, no se ejecutan
+      ],
+      reporter: ['text', 'html'],
+      // Umbral = línea base. Si la cobertura baja de aquí, "pnpm test" falla.
+      // Solo puede subir: ver docs/matriz-rotacion.md
+      thresholds: { lines: 0, branches: 0, functions: 0, statements: 0 },
     },
   },
 })

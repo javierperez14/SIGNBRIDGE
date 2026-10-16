@@ -25,7 +25,7 @@ Anota la cobertura real al cerrar cada semana. El umbral de la semana siguiente 
 
 | Semana | Frontend (%) | Backend (%) | Umbral configurado para la semana siguiente |
 |---|---|---|---|
-| S1 (línea base) | | | |
+| S1 (línea base) | 0 | 0 | 30 (piso de la semana 2) |
 
 ## Regla de rama
 

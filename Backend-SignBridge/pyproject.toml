@@ -44,4 +44,23 @@ package = false
 [dependency-groups]
 dev = [
     "pip-audit==2.9.0",
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
 ]
+
+[tool.pytest]
+pythonpath = ["."]
+testpaths = ["tests"]
+# Cada "uv run pytest" mide la cobertura y falla si baja del umbral
+addopts = ["--cov", "--cov-report=term-missing"]
+
+[tool.coverage.run]
+source = ["app"]
+omit = [
+    # Arranque de la app: solo registra routers y middlewares
+    "app/main.py",
+]
+
+[tool.coverage.report]
+# Línea base de la semana 1. Solo puede subir: ver docs/matriz-rotacion.md
+fail_under = 0
